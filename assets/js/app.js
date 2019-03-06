@@ -7,14 +7,14 @@ var width = parseInt(d3.select("#scatter").style("width"));
 var height = width - width / 3.9;
 
 // Spacing of Margin for graph
-var margin = 20;
+var margin = 10;
 
 // space for placing words
-var labelArea = 110;
+var labelArea = 90;
 
 // padding text for bottom and left axes
-var tPadBot = 40;
-var tPadLeft = 40;
+var tPadBot = 30;
+var tPadLeft = 50;
 
 // Actual canvas for the graph
 var svg = d3
@@ -58,7 +58,6 @@ xTextRefresh();
 
 // // Add the xText axis Labels 
 
-// 1. Poverty
 xText
   .append("text")
   .attr("y", -26)
@@ -89,7 +88,8 @@ yTextRefresh();
 
 // Add the yText axis Labels 
 
-// 1. Obesity
+//  Obesity
+
 yText
   .append("text")
   .attr("y", -26)
@@ -98,14 +98,14 @@ yText
   .attr("class", "aText active y")
   .text("Obese (%)");
 
-// 2. csv file.
+//  csv file.
 
-// state-by-state demographic Census data
 
 d3.csv("assets/data/data.csv").then(function (data) {
 
   visualize(data);
 });
+
 
 function visualize(theData) {
 
@@ -144,7 +144,7 @@ function visualize(theData) {
           "</div>";
       }
 
-      return theState + theX + theY;
+      return theState  + theY + theX;
     });
 
   svg.call(toolTip);
@@ -168,11 +168,11 @@ function visualize(theData) {
   function yMinMax() {
 
     yMin = d3.min(theData, function (d) {
-      return parseFloat(d[curY]) * 0.90;
+      return parseFloat(d[curY]) * 0.95;
     });
 
     yMax = d3.max(theData, function (d) {
-      return parseFloat(d[curY]) * 1.10;
+      return parseFloat(d[curY]) * 1.05;
     });
   }
 
@@ -235,6 +235,7 @@ function visualize(theData) {
     .attr("class", function (d) {
       return "stateCircle " + d.abbr;
     })
+    
     // Hover 
     .on("mouseover", function (d) {
       // tooltip
@@ -278,103 +279,8 @@ function visualize(theData) {
       d3.select("." + d.abbr).style("stroke", "#e3e3e3");
     });
 
-  // Section: IV Dynamic Graph 
 
-
-  d3.selectAll(".aText").on("click", function () {
-
-    var self = d3.select(this);
-
-    if (self.classed("inactive")) {
-
-      var axis = self.attr("data-axis");
-      var name = self.attr("data-name");
-
-      if (axis === "x") {
-
-        curX = name;
-
-
-        xMinMax();
-
-
-        xScale.domain([xMin, xMax]);
-
-
-        svg.select(".xAxis").transition().duration(300).call(xAxis);
-
-
-        d3.selectAll("circle").each(function () {
-
-          d3
-            .select(this)
-            .transition()
-            .attr("cx", function (d) {
-              return xScale(d[curX]);
-            })
-            .duration(300);
-        });
-
-
-        d3.selectAll(".stateText").each(function () {
-
-          d3
-            .select(this)
-            .transition()
-            .attr("dx", function (d) {
-              return xScale(d[curX]);
-            })
-            .duration(300);
-        });
-
-
-        labelChange(axis, self);
-      }
-      else {
-
-        curY = name;
-
-
-        yMinMax();
-
-
-        yScale.domain([yMin, yMax]);
-
-
-        svg.select(".yAxis").transition().duration(300).call(yAxis);
-
-
-        d3.selectAll("circle").each(function () {
-
-          d3
-            .select(this)
-            .transition()
-            .attr("cy", function (d) {
-              return yScale(d[curY]);
-            })
-            .duration(300);
-        });
-
-
-        d3.selectAll(".stateText").each(function () {
-
-          d3
-            .select(this)
-            .transition()
-            .attr("dy", function (d) {
-              return yScale(d[curY]) + circRadius / 3;
-            })
-            .duration(300);
-        });
-
-
-        labelChange(axis, self);
-      }
-    }
-  });
-
-  // Section: V
-
+    
   d3.select(window).on("resize", resize);
 
   function resize() {
