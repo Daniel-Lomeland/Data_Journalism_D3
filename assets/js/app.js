@@ -1,10 +1,10 @@
-// Section: I
 
 // Get the width of the containing box
 var width = parseInt(d3.select("#scatter").style("width"));
 
 // height of the graph
-var height = width - width / 3.9;
+var height = width - width / 4;
+
 
 // Spacing of Margin for graph
 var margin = 10;
@@ -14,9 +14,10 @@ var labelArea = 90;
 
 // padding text for bottom and left axes
 var tPadBot = 30;
-var tPadLeft = 50;
+var tPadLeft = 30;
 
 // Actual canvas for the graph
+
 var svg = d3
   .select("#scatter")
   .append("svg")
@@ -24,21 +25,27 @@ var svg = d3
   .attr("height", height)
   .attr("class", "chart");
 
-// Radius for each dot 
+
+
+// Radius of circles
+
 var circRadius;
 function crGet() {
   if (width <= 530) {
     circRadius = 5;
   }
   else {
-    circRadius = 10;
+    circRadius = 8;
   }
 }
 crGet();
 
-// Axes Labels
+// ________________________________________________________________________________________________________________________________
 
-// a) bottom axes labels.
+
+
+// Axes Labels
+// bottom axes labels.
 svg.append("g").attr("class", "xText");
 
 var xText = d3.select(".xText");
@@ -60,17 +67,18 @@ xTextRefresh();
 
 xText
   .append("text")
-  .attr("y", -26)
+  .attr("y", -27)
   .attr("data-name", "poverty")
   .attr("data-axis", "x")
   .attr("class", "aText active x")
-  .text("In Poverty (%)");
+  .text("In Poverty (%)");  // b) Left Axis
 
-// b) Left Axis
 
 var leftTextX = margin + tPadLeft;
 var leftTextY = (height + labelArea) / 2 - labelArea;
 
+
+// ________________________________________________________________________________________________________________________________
 // label for the axis left of the chart.
 svg.append("g").attr("class", "yText");
 
@@ -84,12 +92,11 @@ function yTextRefresh() {
     "translate(" + leftTextX + ", " + leftTextY + ")rotate(-90)"
   );
 }
+
 yTextRefresh();
 
 // Add the yText axis Labels 
-
 //  Obesity
-
 yText
   .append("text")
   .attr("y", -26)
@@ -98,7 +105,29 @@ yText
   .attr("class", "aText active y")
   .text("Obese (%)");
 
-//  csv file.
+
+// Lacks Healthcare
+yText
+  .append("text")
+  .attr("y", 26)
+  .attr("data-name", "healthcare")
+  .attr("data-axis", "y")
+  .attr("class", "aText inactive y")
+  .text("Lacks Healthcare (%)");
+
+
+// Smokes
+  yText
+  .append("text")
+  .attr("x", 0)
+  .attr("data-name", "smokes")
+  .attr("data-axis", "y")
+  .attr("class", "aText inactive y")
+  .text("Smokes (%)");
+
+// ________________________________________________________________________________________________________________________________
+
+  //  CSV file.
 
 
 d3.csv("assets/data/data.csv").then(function (data) {
@@ -106,6 +135,8 @@ d3.csv("assets/data/data.csv").then(function (data) {
   visualize(data);
 });
 
+
+// ________________________________________________________________________________________________________________________________
 
 function visualize(theData) {
 
@@ -117,13 +148,15 @@ function visualize(theData) {
   var yMin;
   var yMax;
 
-  // Tooltip 
+
+// ________________________________________________________________________________________________________________________________
+  
+// Tooltip 
   var toolTip = d3
     .tip()
     .attr("class", "d3-tip")
-    .offset([40, -60])
+    .offset([30, 70])
     .html(function (d) {
-      console.log(d)
       // x key
       var theX;
       //State name.
@@ -150,9 +183,10 @@ function visualize(theData) {
   svg.call(toolTip);
 
 
-  // Section: II 
+
 
   // min and max for x
+
   function xMinMax() {
 
     xMin = d3.min(theData, function (d) {
@@ -164,7 +198,9 @@ function visualize(theData) {
     });
   }
 
+
   // min and max for y
+
   function yMinMax() {
 
     yMin = d3.min(theData, function (d) {
@@ -175,6 +211,7 @@ function visualize(theData) {
       return parseFloat(d[curY]) * 1.05;
     });
   }
+
 
   function labelChange(axis, clickedText) {
 
@@ -189,7 +226,28 @@ function visualize(theData) {
     clickedText.classed("inactive", false).classed("active", true);
   }
 
-  // Section: III  Scatter Plot
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   xMinMax();
   yMinMax();
@@ -235,8 +293,14 @@ function visualize(theData) {
     .attr("class", function (d) {
       return "stateCircle " + d.abbr;
     })
+
+    
+    
+    
+    
     
     // Hover 
+
     .on("mouseover", function (d) {
       // tooltip
       toolTip.show(d, this);
@@ -261,7 +325,7 @@ function visualize(theData) {
     })
     .attr("dy", function (d) {
 
-      return yScale(d[curY]) + circRadius / 2.5;
+      return yScale(d[curY]) + circRadius / 2;
     })
     .attr("font-size", circRadius)
     .attr("class", "stateText")
@@ -305,6 +369,7 @@ function visualize(theData) {
 
     xTextRefresh();
     yTextRefresh();
+
 
     crGet();
 

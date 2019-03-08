@@ -26,12 +26,12 @@
 /* font size dependent on radius, see app.js */
 .stateText {
   font-family: sans-serif;
-  fill: #fff;
+  fill: rgba(255, 255, 255, 0.938);
   text-anchor: middle;
 }
 
 .stateCircle {
-  fill: #89bdd3;
+  fill: #4b29e2;
   stroke: #e3e3e3;
 }
 
@@ -49,10 +49,12 @@
   text-align: center;
   text-transform: capitalize;
   background: rgba(0, 0, 0, 0.8);
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 /* Mobile Rules */
+
+
 @media screen and (max-width: 530px) {
   .stateText {
     display: none;
