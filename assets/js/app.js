@@ -1,15 +1,11 @@
 // Width of the box
 var width = parseInt(d3.select("#scatter").style("width"));
-
 // height of the graph
 var height = width - width / 4;
-
 // Spacing of Margin 
 var margin = 10;
-
 // space for labels
 var labelArea = 90;
-
 // padding text for bottom and left axes
 var tPadBot = 30;
 var tPadLeft = 30;
@@ -39,8 +35,7 @@ crGet();
 // x labels.
 svg.append("g").attr("class", "xText");
 var xText = d3.select(".xText");
-
-// Width of the window changes.
+// Width window changes.
 function xTextRefresh() {
   xText.attr(
     "transform",
@@ -307,19 +302,10 @@ function visualize(theData) {
       var name = self.attr("data-name");
 
       if (axis === "x") {
-
         curX = name;
-
-
         xMinMax();
-
-
         xScale.domain([xMin, xMax]);
-
-
         svg.select(".xAxis").transition().duration(300).call(xAxis);
-
-
         d3.selectAll("circle").each(function () {
 
           d3
@@ -331,9 +317,7 @@ function visualize(theData) {
             .duration(300);
         });
 
-
         d3.selectAll(".stateText").each(function () {
-
           d3
             .select(this)
             .transition()
@@ -342,24 +326,14 @@ function visualize(theData) {
             })
             .duration(300);
         });
-
-
         labelChange(axis, self);
       }
       else {
-
         curY = name;
-
-
         yMinMax();
-
-
         yScale.domain([yMin, yMax]);
-
-
         svg.select(".yAxis").transition().duration(300).call(yAxis);
-
-
+       
         d3.selectAll("circle").each(function () {
 
           d3
